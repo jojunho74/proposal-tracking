@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>제안서 클릭 통계 관리자</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .dashboard {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+            display: inline-block;
+            width: 200px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+        }
+        .log-entry {
+            border-bottom: 1px solid #eee;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .filter-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h1>📊 제안서 클릭 통계 대시보드</h1>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div>총 조회수</div>
+                <div class="stat-number" id="totalViews">0</div>
+            </div>
+            <div class="stat-card">
+                <div>오늘 조회수</div>
+                <div class="stat-number" id="todayViews">0</div>
+            </div>
+            <div class="stat-card">
+                <div>다운로드</div>
+                <div class="stat-number" id="downloads">0</div>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <h3>필터</h3>
+            <input type="date" id="startDate">
+            <input type="date" id="endDate">
+            <button onclick="applyFilter()">적용</button>
+            <button onclick="exportCSV()">CSV 다운로드</button>
+            <button onclick="clearData()">데이터 초기화</button>
+        </div>
+
+        <h2>📋 최근 활동 로그</h2>
+        <div id="logs"></div>
+    </div>
+
+    <script>
+        const GITHUB_TOKEN = 'YOUR_GITHUB_TOKEN';
+        const REPO = 'YOUR_USERNAME/proposal-tracking';
+
+        async function loadStats() {
+            try {
+                const response = await fetch(`https://api.github.com/repos/${REPO}/issues?state=all&labels=tracking`, {
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                
+                const issues = await response.json();
+                
+                // 통계 계산
+                const today = new Date().toDateString();
+                let totalViews = 0;
+                let todayViews = 0;
+                let downloads = 0;
+                
+                const logsHtml = issues.map(issue => {
+                    const data = JSON.parse(issue.body);
+                    totalViews++;
+                    
+                    if (new Date(data.timestamp).toDateString() === today) {
+                        todayViews++;
+                    }
+                    
+                    if (data.action === 'download') {
+                        downloads++;
+                    }
+                    
+                    return `
+                        <div class="log-entry">
+                            <div>
+                                <strong>${data.action}</strong> - ${data.timestamp}
+                                <br><small>${data.userAgent}</small>
+                            </div>
+                            <div>${data.screenWidth}x${data.screenHeight}</div>
+                        </div>
+                    `;
+                }).join('');
+                
+                document.getElementById('totalViews').textContent = totalViews;
+                document.getElementById('todayViews').textContent = todayViews;
+                document.getElementById('downloads').textContent = downloads;
+                document.getElementById('logs').innerHTML = logsHtml;
+                
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        function applyFilter() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            // 필터링 로직 구현
+            loadStats();
+        }
+
+        function exportCSV() {
+            // CSV 내보내기 로직
+            alert('CSV 다운로드 기능 구현 예정');
+        }
+
+        async function clearData() {
+            if (confirm('정말로 모든 데이터를 삭제하시겠습니까?')) {
+                // 모든 이슈 닫기 로직
+                alert('데이터 초기화 완료');
+                loadStats();
+            }
+        }
+
+        // 페이지 로드 시 통계 불러오기
+        loadStats();
+        
+        // 10초마다 자동 갱신
+        setInterval(loadStats, 10000);
+    </script>
+</body>
+</html>
