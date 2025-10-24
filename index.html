@@ -174,54 +174,43 @@
             padding: 40px;
             border-radius: 16px;
             margin-bottom: 30px;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-        
-        .stat-box {
             text-align: center;
-            padding: 20px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
         }
         
-        .stat-label {
-            font-size: 12px;
+        .stats-title {
+            font-size: 16px;
             letter-spacing: 2px;
             opacity: 0.9;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             text-transform: uppercase;
         }
         
-        .stat-number {
-            font-size: 36px;
-            font-weight: bold;
-            font-family: 'Courier New', monospace;
+        .counter-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
         }
         
-        .stat-sublabel {
-            font-size: 11px;
-            opacity: 0.8;
-            margin-top: 5px;
+        .counter-item {
+            background: rgba(255,255,255,0.15);
+            padding: 20px 30px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            min-width: 200px;
         }
         
-        .loading {
-            animation: pulse 1.5s infinite;
+        .counter-label {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
         }
         
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        
-        .error-text {
-            color: #ffeb3b;
-            font-size: 14px;
+        .counter-image {
+            height: 40px;
+            filter: invert(1) brightness(2);
         }
         
         .info-grid {
@@ -278,8 +267,8 @@
                 font-size: 18px;
             }
             
-            .stats-grid {
-                grid-template-columns: 1fr;
+            .counter-item {
+                min-width: 150px;
             }
         }
         
@@ -317,10 +306,9 @@
             text-transform: uppercase;
         }
         
-        .badge-number {
-            font-size: 32px;
-            font-weight: bold;
-            font-family: 'Courier New', monospace;
+        .badge-counter {
+            height: 35px;
+            filter: invert(1) brightness(2);
         }
         
         @media (max-width: 768px) {
@@ -328,10 +316,6 @@
                 bottom: 15px;
                 right: 15px;
                 padding: 15px 20px;
-            }
-            
-            .badge-number {
-                font-size: 24px;
             }
         }
     </style>
@@ -385,25 +369,32 @@
                     </a>
                 </div>
                 
-                <!-- 방문자 통계 섹션 -->
+                <!-- 방문자 통계 섹션 (이미지 기반) -->
                 <div class="stats-section">
-                    <div class="stats-grid">
-                        <div class="stat-box">
-                            <div class="stat-label">Gamma 제안서</div>
-                            <div class="stat-number loading" id="gammaCount">0</div>
-                            <div class="stat-sublabel">총 방문자</div>
+                    <div class="stats-title">📈 실시간 방문자 통계</div>
+                    <div class="counter-display">
+                        <div class="counter-item">
+                            <div class="counter-label">Gamma 제안서</div>
+                            <img src="https://api.countapi.xyz/get/gtelp-gamma-visits/total?format=svg" 
+                                 alt="Gamma 방문자"
+                                 class="counter-image"
+                                 onerror="this.style.display='none'">
                         </div>
                         
-                        <div class="stat-box">
-                            <div class="stat-label">GitHub 제안서</div>
-                            <div class="stat-number loading" id="githubCount">0</div>
-                            <div class="stat-sublabel">총 방문자</div>
+                        <div class="counter-item">
+                            <div class="counter-label">GitHub 제안서</div>
+                            <img src="https://api.countapi.xyz/get/gtelp-github-visits/total?format=svg" 
+                                 alt="GitHub 방문자"
+                                 class="counter-image"
+                                 onerror="this.style.display='none'">
                         </div>
                         
-                        <div class="stat-box">
-                            <div class="stat-label">이 페이지</div>
-                            <div class="stat-number loading" id="indexCount">0</div>
-                            <div class="stat-sublabel">총 방문자</div>
+                        <div class="counter-item">
+                            <div class="counter-label">이 페이지</div>
+                            <img src="https://api.countapi.xyz/hit/gtelp-index-page/visits?format=svg" 
+                                 alt="Index 방문자"
+                                 class="counter-image"
+                                 onerror="this.style.display='none'">
                         </div>
                     </div>
                 </div>
@@ -415,23 +406,23 @@
                 
                 <div class="info-grid">
                     <div class="info-card">
-                        <div class="info-card-title">✅ Gamma 제안서 추적</div>
+                        <div class="info-card-title">✅ 자동 추적</div>
                         <div class="info-card-text">
-                            Gamma 제안서 링크 클릭 시 추적 페이지를 거쳐 방문이 기록됩니다.
+                            각 제안서 링크를 클릭하면 방문이 자동으로 기록되어 실시간으로 카운트됩니다.
                         </div>
                     </div>
                     
                     <div class="info-card">
-                        <div class="info-card-title">📊 실시간 통계</div>
+                        <div class="info-card-title">📊 실시간 업데이트</div>
                         <div class="info-card-text">
-                            각 제안서의 방문자 수가 실시간으로 업데이트되어 표시됩니다.
+                            페이지를 새로고침하면 최신 방문자 통계를 확인할 수 있습니다.
                         </div>
                     </div>
                     
                     <div class="info-card">
-                        <div class="info-card-title">🔒 Google Analytics</div>
+                        <div class="info-card-title">🔒 안전한 추적</div>
                         <div class="info-card-text">
-                            측정 ID를 설정하면 상세한 분석 데이터를 확인할 수 있습니다.
+                            개인 정보는 수집하지 않으며, 방문 횟수만 익명으로 카운트됩니다.
                         </div>
                     </div>
                 </div>
@@ -446,148 +437,75 @@
     
     <!-- 고정 방문자 카운터 배지 -->
     <div class="visitor-badge">
-        <div class="badge-label">Index Page</div>
-        <div class="badge-number loading" id="badgeCount">0</div>
+        <div class="badge-label">Visitors</div>
+        <img src="https://api.countapi.xyz/hit/gtelp-index-page/visits?format=svg" 
+             alt="방문자"
+             class="badge-counter"
+             onerror="this.alt='추적중...'">
     </div>
 
     <!-- 추적 스크립트 -->
     <script>
-        // 디버깅 모드
-        const DEBUG = true;
-        
-        function log(message, data = null) {
-            if (DEBUG) {
-                if (data) {
-                    console.log(`🔍 ${message}`, data);
-                } else {
-                    console.log(`🔍 ${message}`);
-                }
-            }
-        }
-        
-        // 통계 로드 (개선된 버전)
-        async function loadStatistics() {
-            log('통계 로드 시작...');
-            
-            try {
-                // 1. 이 페이지 방문자 수 증가 (먼저 실행)
-                log('Index 페이지 카운트 증가 중...');
-                const indexResponse = await fetch('https://api.countapi.xyz/hit/gtelp-index-page/visits');
-                const indexData = await indexResponse.json();
-                
-                if (indexData && indexData.value !== undefined) {
-                    const indexCount = indexData.value;
-                    document.getElementById('indexCount').textContent = indexCount.toLocaleString();
-                    document.getElementById('badgeCount').textContent = indexCount.toLocaleString();
-                    document.getElementById('indexCount').classList.remove('loading');
-                    document.getElementById('badgeCount').classList.remove('loading');
-                    log('✅ Index 페이지:', indexCount);
-                } else {
-                    throw new Error('Index 카운트 응답 오류');
-                }
-                
-                // 2. Gamma 제안서 방문자 수 (GET으로 조회만)
-                log('Gamma 카운트 조회 중...');
-                const gammaResponse = await fetch('https://api.countapi.xyz/get/gtelp-gamma-visits/total');
-                const gammaData = await gammaResponse.json();
-                
-                if (gammaData && gammaData.value !== undefined) {
-                    const gammaCount = gammaData.value;
-                    document.getElementById('gammaCount').textContent = gammaCount.toLocaleString();
-                    document.getElementById('gammaCount').classList.remove('loading');
-                    log('✅ Gamma 제안서:', gammaCount);
-                } else {
-                    // 첫 방문이면 0으로 설정
-                    document.getElementById('gammaCount').textContent = '0';
-                    document.getElementById('gammaCount').classList.remove('loading');
-                    log('ℹ️ Gamma 제안서: 첫 방문 (0)');
-                }
-                
-                // 3. GitHub 제안서 방문자 수 (GET으로 조회만)
-                log('GitHub 카운트 조회 중...');
-                const githubResponse = await fetch('https://api.countapi.xyz/get/gtelp-github-visits/total');
-                const githubData = await githubResponse.json();
-                
-                if (githubData && githubData.value !== undefined) {
-                    const githubCount = githubData.value;
-                    document.getElementById('githubCount').textContent = githubCount.toLocaleString();
-                    document.getElementById('githubCount').classList.remove('loading');
-                    log('✅ GitHub 제안서:', githubCount);
-                } else {
-                    document.getElementById('githubCount').textContent = '0';
-                    document.getElementById('githubCount').classList.remove('loading');
-                    log('ℹ️ GitHub 제안서: 첫 방문 (0)');
-                }
-                
-                console.log('✅ G-TELP 추적 시스템 활성화');
-                console.log('📊 통계:', {
-                    index: indexData.value,
-                    gamma: gammaData.value || 0,
-                    github: githubData.value || 0
-                });
-                
-                // Google Analytics
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', 'page_view', {
-                        page_title: 'G-TELP 제안서 인덱스',
-                        page_location: window.location.href
-                    });
-                }
-                
-            } catch (error) {
-                console.error('❌ 통계 로드 오류:', error);
-                log('오류 상세:', error);
-                
-                // 오류 시 기본값 표시
-                ['gammaCount', 'githubCount', 'indexCount', 'badgeCount'].forEach(id => {
-                    const element = document.getElementById(id);
-                    element.textContent = 'N/A';
-                    element.classList.remove('loading');
-                    element.classList.add('error-text');
-                });
-            }
-        }
+        console.log('✅ G-TELP 추적 시스템 활성화');
+        console.log('📊 방문자 카운터가 이미지로 표시됩니다');
         
         // GitHub 제안서 클릭 추적
         function trackGitHubClick() {
-            log('GitHub 제안서 링크 클릭');
+            console.log('🔗 GitHub 제안서 클릭');
             
-            fetch('https://api.countapi.xyz/hit/gtelp-github-visits/total')
-                .then(r => r.json())
-                .then(d => {
-                    log('🔗 GitHub 제안서 클릭 기록:', d.value);
-                    if (typeof gtag !== 'undefined') {
-                        gtag('event', 'click', {
-                            event_category: 'proposal_link',
-                            event_label: 'github',
-                            visitor_count: d.value
-                        });
-                    }
-                })
-                .catch(err => {
-                    log('GitHub 클릭 추적 오류:', err);
+            // 추적 픽셀 생성 (보이지 않게)
+            const img = new Image();
+            img.src = 'https://api.countapi.xyz/hit/gtelp-github-visits/total?_=' + Date.now();
+            img.style.display = 'none';
+            document.body.appendChild(img);
+            
+            // Google Analytics
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'click', {
+                    event_category: 'proposal_link',
+                    event_label: 'github',
+                    transport_type: 'beacon'
                 });
+            }
         }
         
-        // 페이지 로드
+        // 페이지 로드 이벤트
         window.addEventListener('load', function() {
-            log('페이지 로드 완료, 통계 로딩 시작');
-            loadStatistics();
-        });
-        
-        // 5초마다 통계 갱신 (디버깅용, 나중에 30초로 변경 가능)
-        setInterval(function() {
-            log('통계 자동 갱신...');
-            loadStatistics();
-        }, 30000);
-        
-        // 페이지 가시성 변경 시 갱신
-        document.addEventListener('visibilitychange', function() {
-            if (!document.hidden) {
-                log('페이지 다시 포커스, 통계 갱신');
-                loadStatistics();
+            console.log('📍 페이지 로드 완료');
+            
+            // Google Analytics
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'page_view', {
+                    page_title: 'G-TELP 제안서 인덱스',
+                    page_location: window.location.href
+                });
             }
         });
+        
+        // 이미지 로드 확인
+        document.querySelectorAll('.counter-image, .badge-counter').forEach(img => {
+            img.addEventListener('load', function() {
+                console.log('✅ 카운터 이미지 로드 성공:', this.alt);
+            });
+            
+            img.addEventListener('error', function() {
+                console.log('⚠️ 카운터 이미지 로드 실패:', this.alt);
+                // 대체 텍스트 표시
+                const parent = this.parentElement;
+                if (parent) {
+                    const fallback = document.createElement('div');
+                    fallback.style.fontSize = '24px';
+                    fallback.style.fontWeight = 'bold';
+                    fallback.textContent = '추적 중...';
+                    parent.appendChild(fallback);
+                }
+            });
+        });
     </script>
+    
+    <!-- 추적 픽셀 (숨김) -->
+    <img src="https://api.countapi.xyz/hit/gtelp-index-page/visits?_=load" 
+         alt="" 
+         style="position:absolute; width:1px; height:1px; opacity:0; pointer-events:none;">
 </body>
 </html>
