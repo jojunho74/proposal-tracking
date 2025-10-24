@@ -181,44 +181,41 @@
             font-size: 16px;
             letter-spacing: 2px;
             opacity: 0.9;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             text-transform: uppercase;
         }
         
         .counter-display {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
         }
         
         .counter-item {
             background: rgba(255,255,255,0.15);
-            padding: 25px 35px;
+            padding: 30px;
             border-radius: 12px;
             backdrop-filter: blur(10px);
-            min-width: 220px;
         }
         
         .counter-label {
-            font-size: 12px;
+            font-size: 13px;
             opacity: 0.9;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             letter-spacing: 1px;
         }
         
         .counter-number {
-            font-size: 42px;
+            font-size: 48px;
             font-weight: bold;
             font-family: 'Courier New', monospace;
             letter-spacing: 3px;
         }
         
         .counter-sublabel {
-            font-size: 10px;
+            font-size: 11px;
             opacity: 0.7;
-            margin-top: 8px;
+            margin-top: 10px;
         }
         
         .info-grid {
@@ -254,22 +251,23 @@
             font-size: 13px;
         }
         
-        .analytics-note {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
+        .how-it-works {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 30px;
         }
         
-        .analytics-note-title {
+        .how-it-works-title {
             font-weight: bold;
-            color: #856404;
-            margin-bottom: 8px;
+            color: #1565c0;
+            margin-bottom: 10px;
+            font-size: 16px;
         }
         
-        .analytics-note-text {
-            color: #856404;
+        .how-it-works-text {
+            color: #1565c0;
             font-size: 14px;
             line-height: 1.6;
         }
@@ -295,16 +293,11 @@
                 font-size: 18px;
             }
             
-            .counter-item {
-                min-width: 180px;
-            }
-            
             .counter-number {
-                font-size: 32px;
+                font-size: 36px;
             }
         }
         
-        /* 방문자 카운터 뱃지 */
         .visitor-badge {
             position: fixed;
             bottom: 20px;
@@ -360,50 +353,42 @@
 <body>
     <div class="container">
         <div class="card">
-            <!-- 헤더 -->
             <div class="header">
                 <div class="logo">📊</div>
                 <h1>G-TELP 제안서 추적 시스템</h1>
-                <p>각 제안서 방문이 자동으로 기록됩니다</p>
+                <p>실제 Gamma 사이트 방문이 추적됩니다</p>
             </div>
             
-            <!-- 메인 콘텐츠 -->
             <div class="content">
-                <!-- Analytics 안내 -->
-                <div class="analytics-note">
-                    <div class="analytics-note-title">📈 Google Analytics 추적 활성화</div>
-                    <div class="analytics-note-text">
-                        이 페이지는 Google Analytics로 방문자를 추적합니다. 
-                        상세한 통계는 <a href="https://analytics.google.com" target="_blank" style="color: #667eea; font-weight: bold;">Google Analytics 대시보드</a>에서 확인하세요.
+                <!-- 작동 방식 설명 -->
+                <div class="how-it-works">
+                    <div class="how-it-works-title">🎯 추적 방식</div>
+                    <div class="how-it-works-text">
+                        Gamma 제안서 링크를 클릭하면 추적 페이지를 거쳐 실제 Gamma 사이트로 이동합니다. 
+                        이 과정에서 방문이 자동으로 카운트되어 아래 통계에 반영됩니다.
                     </div>
                 </div>
                 
-                <!-- 제안서 링크 섹션 -->
+                <!-- 제안서 링크 -->
                 <div class="section-title">
                     📄 제안서 확인하기
                 </div>
                 
                 <div class="links-grid">
-                    <!-- Gamma 제안서 -->
-                    <a href="gamma-redirect.html" 
-                       class="link-card"
-                       onclick="trackLinkClick('gamma')">
+                    <a href="gamma-tracker.html" class="link-card">
                         <div class="link-content">
                             <div class="link-icon">🎯</div>
                             <div class="link-title">Gamma 인터랙티브 제안서</div>
                             <div class="link-desc">
                                 프레젠테이션 형식의 제안서<br>
-                                <strong style="color: #667eea;">✓ 방문 추적 활성화</strong>
+                                <strong style="color: #667eea;">✓ 실제 사이트 방문 추적</strong>
                             </div>
                         </div>
                         <div class="link-arrow">→</div>
                     </a>
                     
-                    <!-- GitHub 제안서 -->
                     <a href="https://jojunho74.github.io/proposal-tracking/gtelp-proposal-tracking" 
-                       class="link-card"
-                       target="_blank"
-                       onclick="trackLinkClick('github')">
+                       class="link-card" target="_blank" onclick="trackGithubClick()">
                         <div class="link-content">
                             <div class="link-icon">📱</div>
                             <div class="link-title">GitHub 상세 제안서</div>
@@ -416,156 +401,128 @@
                     </a>
                 </div>
                 
-                <!-- 방문자 통계 섹션 (로컬 카운트) -->
+                <!-- 방문자 통계 -->
                 <div class="stats-section">
-                    <div class="stats-title">📈 세션 통계</div>
+                    <div class="stats-title">📈 실시간 방문자 통계</div>
                     <div class="counter-display">
                         <div class="counter-item">
-                            <div class="counter-label">Gamma 클릭</div>
-                            <div class="counter-number" id="gammaCount">0</div>
-                            <div class="counter-sublabel">이 세션에서</div>
+                            <div class="counter-label">Gamma 제안서</div>
+                            <div class="counter-number" id="gammaTotal">0</div>
+                            <div class="counter-sublabel">총 방문자</div>
                         </div>
                         
                         <div class="counter-item">
-                            <div class="counter-label">GitHub 클릭</div>
-                            <div class="counter-number" id="githubCount">0</div>
-                            <div class="counter-sublabel">이 세션에서</div>
+                            <div class="counter-label">오늘 방문</div>
+                            <div class="counter-number" id="gammaToday">0</div>
+                            <div class="counter-sublabel">Gamma 제안서</div>
                         </div>
                         
                         <div class="counter-item">
-                            <div class="counter-label">페이지 뷰</div>
-                            <div class="counter-number" id="pageViewCount">1</div>
-                            <div class="counter-sublabel">현재 세션</div>
+                            <div class="counter-label">GitHub 제안서</div>
+                            <div class="counter-number" id="githubTotal">0</div>
+                            <div class="counter-sublabel">총 방문자</div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- 정보 카드 섹션 -->
+                <!-- 정보 카드 -->
                 <div class="section-title">
                     💡 추적 정보
                 </div>
                 
                 <div class="info-grid">
                     <div class="info-card">
-                        <div class="info-card-title">✅ Google Analytics</div>
+                        <div class="info-card-title">✅ 실제 사이트 추적</div>
                         <div class="info-card-text">
-                            모든 방문과 클릭이 Google Analytics로 전송되어 상세한 분석이 가능합니다.
+                            Gamma 사이트 방문 시 추적 페이지를 거쳐 실제 방문이 기록됩니다.
                         </div>
                     </div>
                     
                     <div class="info-card">
-                        <div class="info-card-title">📊 실시간 데이터</div>
+                        <div class="info-card-title">📊 LocalStorage 저장</div>
                         <div class="info-card-text">
-                            Google Analytics 실시간 보고서에서 현재 방문자와 활동을 즉시 확인할 수 있습니다.
+                            방문 통계는 브라우저에 저장되어 페이지를 새로고침해도 유지됩니다.
                         </div>
                     </div>
                     
                     <div class="info-card">
-                        <div class="info-card-title">🔒 프라이버시</div>
+                        <div class="info-card-title">🔒 Google Analytics</div>
                         <div class="info-card-text">
-                            개인 식별 정보는 수집하지 않으며, 통계 목적의 익명 데이터만 수집됩니다.
+                            측정 ID를 설정하면 상세한 분석도 함께 수집됩니다.
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- 푸터 -->
             <div class="footer">
-                <p>© 2025 G-TELP Analytics System | Powered by Google Analytics</p>
+                <p>© 2025 G-TELP Analytics System | Gamma 사이트 실제 방문 추적</p>
             </div>
         </div>
     </div>
     
-    <!-- 고정 방문자 카운터 배지 -->
+    <!-- 방문자 배지 -->
     <div class="visitor-badge">
-        <div class="badge-label">Session</div>
-        <div class="badge-number" id="badgeCount">1</div>
+        <div class="badge-label">Gamma Visits</div>
+        <div class="badge-number" id="badgeCount">0</div>
     </div>
 
-    <!-- 추적 스크립트 -->
     <script>
-        // 세션 스토리지를 사용한 로컬 카운터
-        let gammaClicks = parseInt(sessionStorage.getItem('gammaClicks') || '0');
-        let githubClicks = parseInt(sessionStorage.getItem('githubClicks') || '0');
-        let pageViews = parseInt(sessionStorage.getItem('pageViews') || '0');
-        
-        // 페이지 뷰 증가
-        pageViews++;
-        sessionStorage.setItem('pageViews', pageViews);
-        
-        // 화면 업데이트
-        function updateDisplay() {
-            document.getElementById('gammaCount').textContent = gammaClicks;
-            document.getElementById('githubCount').textContent = githubClicks;
-            document.getElementById('pageViewCount').textContent = pageViews;
-            document.getElementById('badgeCount').textContent = pageViews;
+        // 통계 로드
+        function loadStatistics() {
+            // Gamma 총 방문자
+            const gammaTotal = parseInt(localStorage.getItem('gtelp_gamma_visits') || '0');
+            document.getElementById('gammaTotal').textContent = gammaTotal;
+            document.getElementById('badgeCount').textContent = gammaTotal;
+            
+            // Gamma 오늘 방문
+            const today = new Date().toISOString().split('T')[0];
+            const todayKey = `gtelp_gamma_visits_${today}`;
+            const gammaToday = parseInt(localStorage.getItem(todayKey) || '0');
+            document.getElementById('gammaToday').textContent = gammaToday;
+            
+            // GitHub 방문자
+            const githubTotal = parseInt(localStorage.getItem('gtelp_github_visits') || '0');
+            document.getElementById('githubTotal').textContent = githubTotal;
+            
+            console.log('✅ G-TELP 추적 시스템 활성화');
+            console.log('📊 통계:', {
+                gammaTotal: gammaTotal,
+                gammaToday: gammaToday,
+                githubTotal: githubTotal
+            });
         }
         
-        // 링크 클릭 추적
-        function trackLinkClick(site) {
-            if (site === 'gamma') {
-                gammaClicks++;
-                sessionStorage.setItem('gammaClicks', gammaClicks);
-                console.log('🎯 Gamma 제안서 클릭:', gammaClicks);
-            } else if (site === 'github') {
-                githubClicks++;
-                sessionStorage.setItem('githubClicks', githubClicks);
-                console.log('📱 GitHub 제안서 클릭:', githubClicks);
-            }
+        // GitHub 클릭 추적
+        function trackGithubClick() {
+            let githubTotal = parseInt(localStorage.getItem('gtelp_github_visits') || '0');
+            githubTotal++;
+            localStorage.setItem('gtelp_github_visits', githubTotal);
             
-            updateDisplay();
+            console.log('📱 GitHub 제안서 클릭:', githubTotal);
             
-            // Google Analytics 이벤트
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'click', {
                     event_category: 'proposal_link',
-                    event_label: site,
-                    value: site === 'gamma' ? gammaClicks : githubClicks
+                    event_label: 'github',
+                    value: githubTotal
                 });
-                
-                console.log('✅ Google Analytics 이벤트 전송:', site);
             }
         }
         
         // 초기화
         window.addEventListener('load', function() {
-            updateDisplay();
+            loadStatistics();
             
-            console.log('✅ G-TELP 추적 시스템 활성화');
-            console.log('📊 세션 통계:', {
-                gamma: gammaClicks,
-                github: githubClicks,
-                pageViews: pageViews
-            });
-            
-            // Google Analytics 페이지뷰
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'page_view', {
                     page_title: 'G-TELP 제안서 인덱스',
-                    page_location: window.location.href,
-                    page_path: window.location.pathname
+                    page_location: window.location.href
                 });
-                
-                console.log('✅ Google Analytics 페이지뷰 전송');
-            } else {
-                console.log('⚠️ Google Analytics가 설정되지 않았습니다');
-                console.log('💡 측정 ID를 교체하면 상세 분석이 가능합니다');
             }
         });
         
-        // 페이지 언로드 시 체류 시간 전송
-        let startTime = Date.now();
-        window.addEventListener('beforeunload', function() {
-            const timeSpent = Math.floor((Date.now() - startTime) / 1000);
-            
-            if (typeof gtag !== 'undefined' && timeSpent > 0) {
-                gtag('event', 'timing_complete', {
-                    name: 'time_on_page',
-                    value: timeSpent,
-                    event_category: 'engagement'
-                });
-            }
-        });
+        // 5초마다 통계 갱신 (다른 탭에서 클릭한 경우 반영)
+        setInterval(loadStatistics, 5000);
     </script>
 </body>
 </html>
