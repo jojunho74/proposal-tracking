@@ -1,48 +1,20 @@
 <!DOCTYPE html>
 <html lang="ko">
-<!DOCTYPE html>
-<html>
 <head>
-    <!-- 기존 head 내용 -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="G-TELP 제안서 방문자 추적 시스템">
+    <title>G-TELP 제안서 | 방문자 추적</title>
     
-    <!-- Google Analytics - </head> 바로 위에 추가 -->
+    <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YOUR_MEASUREMENT_ID"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-YOUR_MEASUREMENT_ID');
+        gtag('config', 'G-MLPBC6XMFC');
     </script>
-</head>
-<body>
-    <!-- 기존 body 내용 -->
     
-    <!-- 방문자 카운터 - </body> 바로 위에 추가 -->
-    <div style="position:fixed;bottom:20px;right:20px;background:#667eea;color:white;padding:20px 30px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.3);text-align:center;z-index:9999;">
-        <div style="font-size:12px;margin-bottom:10px;opacity:0.9;">VISITORS</div>
-        <img src="https://api.countapi.xyz/hit/gtelp-github-site/visits?format=svg" 
-             alt="방문자"
-             style="height:40px;filter:invert(1);">
-    </div>
-</body>
-</html>
-```
-
----
-
-## 🎯 왜 오류가 났나요?
-
-### 로컬 파일 (file://) vs 웹 서버 (https://)
-```
-❌ file:///C:/Users/xxx/Desktop/page.html
-   → CORS 차단됨 (외부 API 호출 불가)
-
-✅ https://jojunho74.github.io/page.html
-   → 정상 작동 (웹 서버에서 실행)
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>지텔프 제안서 트래킹</title>
     <style>
         * {
             margin: 0;
@@ -51,163 +23,471 @@
         }
         
         body {
-            font-family: 'Malgun Gothic', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             padding: 20px;
         }
         
         .container {
+            max-width: 900px;
+            width: 100%;
+        }
+        
+        .card {
             background: white;
-            border-radius: 20px;
-            padding: 50px;
+            border-radius: 24px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            max-width: 600px;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px 40px;
             text-align: center;
         }
         
-        h1 {
-            color: #800020;
-            font-size: 2.5em;
-            margin-bottom: 20px;
+        .logo {
+            font-size: 48px;
+            margin-bottom: 15px;
         }
         
-        .subtitle {
-            color: #666;
-            font-size: 1.2em;
-            margin-bottom: 40px;
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 12px;
+            font-weight: 700;
         }
         
-        .button-group {
+        .header p {
+            opacity: 0.95;
+            font-size: 16px;
+        }
+        
+        .content {
+            padding: 50px 40px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 25px;
             display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .links-grid {
+            display: grid;
             gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
+            margin-bottom: 50px;
         }
         
-        .btn {
-            padding: 15px 40px;
-            font-size: 18px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
+        .link-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 30px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 16px;
             text-decoration: none;
-            display: inline-block;
+            color: #333;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
         }
         
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+        .link-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
         }
         
-        .btn-secondary {
-            background: #800020;
-            color: white;
+        .link-card:hover::before {
+            left: 100%;
         }
         
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        .link-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            border-color: #667eea;
         }
         
-        .status {
-            margin-top: 30px;
-            padding: 15px;
-            background: #f0f0f0;
-            border-radius: 10px;
+        .link-content {
+            flex: 1;
+        }
+        
+        .link-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .link-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #667eea;
+        }
+        
+        .link-desc {
             font-size: 14px;
             color: #666;
+            line-height: 1.5;
         }
         
-        .success {
-            background: #d4edda;
-            color: #155724;
+        .link-arrow {
+            font-size: 32px;
+            color: #667eea;
+            transition: transform 0.3s;
         }
         
-        .error {
-            background: #f8d7da;
-            color: #721c24;
+        .link-card:hover .link-arrow {
+            transform: translateX(5px);
+        }
+        
+        .stats-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .stats-title {
+            font-size: 14px;
+            letter-spacing: 3px;
+            opacity: 0.95;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        
+        .visitor-count {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .count-icon {
+            font-size: 40px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .info-card {
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .info-card-title {
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        
+        .info-card-text {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.7;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+            font-size: 13px;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 40px 30px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .content {
+                padding: 40px 30px;
+            }
+            
+            .link-card {
+                padding: 25px;
+            }
+            
+            .link-title {
+                font-size: 18px;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* 방문자 카운터 뱃지 */
+        .visitor-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            text-align: center;
+            z-index: 9999;
+            animation: slideInRight 0.5s ease-out;
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .badge-label {
+            font-size: 11px;
+            letter-spacing: 2px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        
+        @media (max-width: 768px) {
+            .visitor-badge {
+                bottom: 15px;
+                right: 15px;
+                padding: 15px 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🌟 지텔프 제안서</h1>
-        <p class="subtitle">트래킹 시스템이 활성화되었습니다</p>
-        
-        <div class="button-group">
-            <a href="proposal.html" class="btn btn-primary">📄 제안서 보기</a>
-            <a href="admin.html" class="btn btn-secondary">📊 관리자 대시보드</a>
-        </div>
-        
-        <div class="status" id="status">
-            ⏳ 시스템 초기화 중...
+        <div class="card">
+            <!-- 헤더 -->
+            <div class="header">
+                <div class="logo">📊</div>
+                <h1>G-TELP 제안서 추적 시스템</h1>
+                <p>두 개의 제안서를 한 곳에서 확인하세요</p>
+            </div>
+            
+            <!-- 메인 콘텐츠 -->
+            <div class="content">
+                <!-- 제안서 링크 섹션 -->
+                <div class="section-title">
+                    📄 제안서 확인하기
+                </div>
+                
+                <div class="links-grid">
+                    <a href="https://g-telp-ibt-6d5d4q2.gamma.site/" 
+                       class="link-card" 
+                       target="_blank"
+                       onclick="trackClick('gamma')">
+                        <div class="link-content">
+                            <div class="link-icon">🎯</div>
+                            <div class="link-title">Gamma 인터랙티브 제안서</div>
+                            <div class="link-desc">
+                                프레젠테이션 형식의 제안서<br>
+                                인터랙티브 요소와 비주얼 중심
+                            </div>
+                        </div>
+                        <div class="link-arrow">→</div>
+                    </a>
+                    
+                    <a href="https://jojunho74.github.io/proposal-tracking/gtelp-proposal-tracking" 
+                       class="link-card"
+                       target="_blank"
+                       onclick="trackClick('github')">
+                        <div class="link-content">
+                            <div class="link-icon">📱</div>
+                            <div class="link-title">GitHub 상세 제안서</div>
+                            <div class="link-desc">
+                                상세 추적이 가능한 제안서<br>
+                                분석 데이터와 통계 중심
+                            </div>
+                        </div>
+                        <div class="link-arrow">→</div>
+                    </a>
+                </div>
+                
+                <!-- 방문자 통계 섹션 -->
+                <div class="stats-section">
+                    <div class="stats-title">📈 이 페이지 방문자</div>
+                    <div class="visitor-count">
+                        <span class="count-icon">👥</span>
+                        <img src="https://api.countapi.xyz/hit/gtelp-tracking-main/visits?format=svg" 
+                             alt="방문자 수"
+                             style="height: 50px; filter: invert(1);">
+                    </div>
+                </div>
+                
+                <!-- 정보 카드 섹션 -->
+                <div class="section-title">
+                    💡 추적 정보
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">✅ 실시간 추적</div>
+                        <div class="info-card-text">
+                            Google Analytics로 실시간 방문자, 페이지뷰, 체류시간을 추적합니다.
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-card-title">📊 링크 클릭 기록</div>
+                        <div class="info-card-text">
+                            각 제안서 링크 클릭이 자동으로 기록되어 어떤 버전이 더 많이 조회되는지 확인할 수 있습니다.
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-card-title">🔒 프라이버시 보호</div>
+                        <div class="info-card-text">
+                            개인 식별 정보는 수집하지 않으며, 통계 목적의 데이터만 익명으로 수집됩니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 푸터 -->
+            <div class="footer">
+                <p>© 2025 G-TELP Analytics System | Powered by Google Analytics & CountAPI</p>
+            </div>
         </div>
     </div>
+    
+    <!-- 고정 방문자 카운터 배지 -->
+    <div class="visitor-badge">
+        <div class="badge-label">Visitors</div>
+        <img src="https://api.countapi.xyz/hit/gtelp-tracking-main/visits?format=svg" 
+             alt="방문자"
+             style="height: 40px; filter: invert(1);">
+    </div>
 
+    <!-- 추적 스크립트 -->
     <script>
-        // GitHub 설정
-        const GITHUB_TOKEN = 'YOUR_GITHUB_TOKEN_HERE';  // ⚠️ 실제 토큰으로 교체
-        const REPO = 'YOUR_USERNAME/gtelp-proposal-tracking';  // ⚠️ 실제 repo로 교체
-        
-        // 페이지 방문 추적
-        async function trackPageView() {
-            const statusEl = document.getElementById('status');
+        // 링크 클릭 추적
+        function trackClick(site) {
+            const siteName = site === 'gamma' ? 'Gamma 제안서' : 'GitHub 제안서';
+            console.log(`🔗 클릭: ${siteName}`);
             
-            try {
-                const data = {
-                    action: 'landing_page_view',
-                    timestamp: new Date().toISOString(),
-                    page: window.location.href,
-                    referrer: document.referrer || 'direct',
-                    userAgent: navigator.userAgent,
-                    screenWidth: window.screen.width,
-                    screenHeight: window.screen.height,
-                    language: navigator.language,
-                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-                };
-                
-                // GitHub API 호출
-                const response = await fetch(`https://api.github.com/repos/${REPO}/issues`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `token ${GITHUB_TOKEN}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        title: `[방문] ${new Date().toLocaleString('ko-KR')}`,
-                        body: `\`\`\`json\n${JSON.stringify(data, null, 2)}\n\`\`\``,
-                        labels: ['tracking', 'page-view']
-                    })
+            // Google Analytics 이벤트 전송
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'click', {
+                    event_category: 'proposal_link',
+                    event_label: site,
+                    event_value: 1,
+                    transport_type: 'beacon'
                 });
-                
-                if (response.ok) {
-                    statusEl.textContent = '✅ 트래킹 활성화됨 - 정상 작동 중';
-                    statusEl.className = 'status success';
-                } else {
-                    throw new Error('API 호출 실패');
-                }
-                
-            } catch (error) {
-                console.error('Tracking error:', error);
-                statusEl.textContent = '⚠️ 트래킹 오류 - 설정을 확인하세요';
-                statusEl.className = 'status error';
             }
+            
+            // 시각적 피드백
+            const clickedCard = event.currentTarget;
+            clickedCard.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                clickedCard.style.transform = '';
+            }, 100);
         }
         
-        // 페이지 로드 시 자동 실행
-        window.addEventListener('load', () => {
-            // 토큰이 설정되지 않았으면 경고
-            if (GITHUB_TOKEN === 'YOUR_GITHUB_TOKEN_HERE') {
-                document.getElementById('status').textContent = '⚠️ GitHub 토큰을 설정해주세요';
-                document.getElementById('status').className = 'status error';
+        // 페이지 로드 완료
+        window.addEventListener('load', function() {
+            console.log('✅ G-TELP 추적 시스템 활성화');
+            
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'page_view', {
+                    page_title: 'G-TELP 제안서 추적',
+                    page_location: window.location.href,
+                    page_path: window.location.pathname
+                });
+            }
+        });
+        
+        // 체류 시간 추적
+        let startTime = Date.now();
+        let isActive = true;
+        
+        // 페이지 가시성 변경 감지
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                isActive = false;
             } else {
-                trackPageView();
+                isActive = true;
+            }
+        });
+        
+        // 페이지 이탈 시 체류 시간 기록
+        window.addEventListener('beforeunload', function() {
+            if (isActive) {
+                const timeSpent = Math.floor((Date.now() - startTime) / 1000);
+                
+                if (typeof gtag !== 'undefined' && timeSpent > 0) {
+                    gtag('event', 'timing_complete', {
+                        name: 'time_on_page',
+                        value: timeSpent,
+                        event_category: 'engagement'
+                    });
+                }
+                
+                console.log(`⏱️ 체류 시간: ${timeSpent}초`);
+            }
+        });
+        
+        // 스크롤 깊이 추적
+        let maxScroll = 0;
+        window.addEventListener('scroll', function() {
+            const scrollPercent = Math.round((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
+            
+            if (scrollPercent > maxScroll) {
+                maxScroll = scrollPercent;
+                
+                // 25%, 50%, 75%, 100% 지점에서 이벤트 전송
+                if ([25, 50, 75, 100].includes(scrollPercent)) {
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'scroll', {
+                            event_category: 'engagement',
+                            event_label: `${scrollPercent}%`,
+                            value: scrollPercent
+                        });
+                    }
+                }
             }
         });
     </script>
