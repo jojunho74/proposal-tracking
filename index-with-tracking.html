@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="G-TELP 제안서 방문자 추적 시스템">
+    <title>G-TELP 제안서 | 방문자 추적</title>
+    
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YOUR_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YOUR_MEASUREMENT_ID');
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            opacity: 0.95;
+            font-size: 16px;
+        }
+        
+        .content {
+            padding: 50px 40px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .links-grid {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+        
+        .link-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 30px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 16px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .link-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .link-card:hover::before {
+            left: 100%;
+        }
+        
+        .link-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            border-color: #667eea;
+        }
+        
+        .link-content {
+            flex: 1;
+        }
+        
+        .link-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .link-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #667eea;
+        }
+        
+        .link-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .link-arrow {
+            font-size: 32px;
+            color: #667eea;
+            transition: transform 0.3s;
+        }
+        
+        .link-card:hover .link-arrow {
+            transform: translateX(5px);
+        }
+        
+        .stats-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .stat-box {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            letter-spacing: 2px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .stat-sublabel {
+            font-size: 11px;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .info-card {
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .info-card-title {
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        
+        .info-card-text {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.7;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+            font-size: 13px;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 40px 30px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .content {
+                padding: 40px 30px;
+            }
+            
+            .link-card {
+                padding: 25px;
+            }
+            
+            .link-title {
+                font-size: 18px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* 방문자 카운터 뱃지 */
+        .visitor-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            text-align: center;
+            z-index: 9999;
+            animation: slideInRight 0.5s ease-out;
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .badge-label {
+            font-size: 11px;
+            letter-spacing: 2px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        
+        @media (max-width: 768px) {
+            .visitor-badge {
+                bottom: 15px;
+                right: 15px;
+                padding: 15px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <!-- 헤더 -->
+            <div class="header">
+                <div class="logo">📊</div>
+                <h1>G-TELP 제안서 추적 시스템</h1>
+                <p>각 제안서 방문이 자동으로 기록됩니다</p>
+            </div>
+            
+            <!-- 메인 콘텐츠 -->
+            <div class="content">
+                <!-- 제안서 링크 섹션 -->
+                <div class="section-title">
+                    📄 제안서 확인하기
+                </div>
+                
+                <div class="links-grid">
+                    <!-- Gamma 제안서 - 리디렉션 페이지로 연결 -->
+                    <a href="gamma-redirect.html" 
+                       class="link-card">
+                        <div class="link-content">
+                            <div class="link-icon">🎯</div>
+                            <div class="link-title">Gamma 인터랙티브 제안서</div>
+                            <div class="link-desc">
+                                프레젠테이션 형식의 제안서<br>
+                                <strong style="color: #667eea;">✓ 방문 추적 활성화</strong>
+                            </div>
+                        </div>
+                        <div class="link-arrow">→</div>
+                    </a>
+                    
+                    <!-- GitHub 제안서 - 직접 연결 -->
+                    <a href="https://jojunho74.github.io/proposal-tracking/gtelp-proposal-tracking" 
+                       class="link-card"
+                       target="_blank"
+                       onclick="trackGitHubClick()">
+                        <div class="link-content">
+                            <div class="link-icon">📱</div>
+                            <div class="link-title">GitHub 상세 제안서</div>
+                            <div class="link-desc">
+                                상세 추적이 가능한 제안서<br>
+                                <strong style="color: #667eea;">✓ 방문 추적 활성화</strong>
+                            </div>
+                        </div>
+                        <div class="link-arrow">→</div>
+                    </a>
+                </div>
+                
+                <!-- 방문자 통계 섹션 -->
+                <div class="stats-section">
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">Gamma 제안서</div>
+                            <div class="stat-number" id="gammaCount">---</div>
+                            <div class="stat-sublabel">총 방문자</div>
+                        </div>
+                        
+                        <div class="stat-box">
+                            <div class="stat-label">GitHub 제안서</div>
+                            <div class="stat-number" id="githubCount">---</div>
+                            <div class="stat-sublabel">총 방문자</div>
+                        </div>
+                        
+                        <div class="stat-box">
+                            <div class="stat-label">이 페이지</div>
+                            <div class="stat-number" id="indexCount">---</div>
+                            <div class="stat-sublabel">총 방문자</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 정보 카드 섹션 -->
+                <div class="section-title">
+                    💡 추적 정보
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-card-title">✅ Gamma 제안서 추적</div>
+                        <div class="info-card-text">
+                            Gamma 제안서 링크 클릭 시 추적 페이지를 거쳐 방문이 기록됩니다.
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-card-title">📊 실시간 통계</div>
+                        <div class="info-card-text">
+                            각 제안서의 방문자 수가 실시간으로 업데이트되어 표시됩니다.
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-card-title">🔒 Google Analytics</div>
+                        <div class="info-card-text">
+                            측정 ID를 설정하면 상세한 분석 데이터를 확인할 수 있습니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 푸터 -->
+            <div class="footer">
+                <p>© 2025 G-TELP Analytics System | 각 제안서 방문이 자동으로 추적됩니다</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 고정 방문자 카운터 배지 -->
+    <div class="visitor-badge">
+        <div class="badge-label">Index Visitors</div>
+        <img src="https://api.countapi.xyz/hit/gtelp-index-page/visits?format=svg" 
+             alt="방문자"
+             style="height: 40px; filter: invert(1);">
+    </div>
+
+    <!-- 추적 스크립트 -->
+    <script>
+        // 통계 로드
+        async function loadStatistics() {
+            try {
+                // Gamma 제안서 방문자 수
+                const gammaResponse = await fetch('https://api.countapi.xyz/get/gtelp-gamma-visits/total');
+                const gammaData = await gammaResponse.json();
+                document.getElementById('gammaCount').textContent = gammaData.value.toLocaleString();
+                
+                // GitHub 제안서 방문자 수
+                const githubResponse = await fetch('https://api.countapi.xyz/get/gtelp-github-visits/total');
+                const githubData = await githubResponse.json();
+                document.getElementById('githubCount').textContent = githubData.value.toLocaleString();
+                
+                // 이 페이지 방문자 수 (증가)
+                const indexResponse = await fetch('https://api.countapi.xyz/hit/gtelp-index-page/visits');
+                const indexData = await indexResponse.json();
+                document.getElementById('indexCount').textContent = indexData.value.toLocaleString();
+                
+                console.log('✅ G-TELP 추적 시스템 활성화');
+                console.log('📊 통계:', {
+                    gamma: gammaData.value,
+                    github: githubData.value,
+                    index: indexData.value
+                });
+                
+            } catch (error) {
+                console.error('❌ 통계 로드 오류:', error);
+            }
+        }
+        
+        // GitHub 제안서 클릭 추적
+        function trackGitHubClick() {
+            fetch('https://api.countapi.xyz/hit/gtelp-github-visits/total')
+                .then(r => r.json())
+                .then(d => {
+                    console.log('🔗 GitHub 제안서 클릭 기록:', d.value);
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'click', {
+                            event_category: 'proposal_link',
+                            event_label: 'github',
+                            visitor_count: d.value
+                        });
+                    }
+                });
+        }
+        
+        // 페이지 로드
+        window.addEventListener('load', function() {
+            loadStatistics();
+            
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'page_view', {
+                    page_title: 'G-TELP 제안서 인덱스',
+                    page_location: window.location.href
+                });
+            }
+        });
+        
+        // 30초마다 통계 갱신
+        setInterval(loadStatistics, 30000);
+    </script>
+</body>
+</html>
