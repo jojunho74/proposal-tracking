@@ -12,7 +12,7 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-MLPBC6XMFC');
+        gtag('config', 'G-YOUR_MEASUREMENT_ID');
     </script>
     
     <style>
@@ -112,6 +112,7 @@
             border: 2px solid transparent;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
         
         .link-card::before {
@@ -172,28 +173,41 @@
             color: white;
             padding: 40px;
             border-radius: 16px;
-            text-align: center;
             margin-bottom: 30px;
         }
         
-        .stats-title {
-            font-size: 14px;
-            letter-spacing: 3px;
-            opacity: 0.95;
-            margin-bottom: 20px;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .stat-box {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            letter-spacing: 2px;
+            opacity: 0.9;
+            margin-bottom: 10px;
             text-transform: uppercase;
-            font-weight: 600;
         }
         
-        .visitor-count {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
         }
         
-        .count-icon {
-            font-size: 40px;
+        .stat-sublabel {
+            font-size: 11px;
+            opacity: 0.8;
+            margin-top: 5px;
         }
         
         .info-grid {
@@ -250,7 +264,7 @@
                 font-size: 18px;
             }
             
-            .info-grid {
+            .stats-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -305,7 +319,7 @@
             <div class="header">
                 <div class="logo">📊</div>
                 <h1>G-TELP 제안서 추적 시스템</h1>
-                <p>두 개의 제안서를 한 곳에서 확인하세요</p>
+                <p>각 제안서 방문이 자동으로 기록됩니다</p>
             </div>
             
             <!-- 메인 콘텐츠 -->
@@ -316,31 +330,31 @@
                 </div>
                 
                 <div class="links-grid">
-                    <a href="https://g-telp-ibt-6d5d4q2.gamma.site/" 
-                       class="link-card" 
-                       target="_blank"
-                       onclick="trackClick('gamma')">
+                    <!-- Gamma 제안서 - 리디렉션 페이지로 연결 -->
+                    <a href="gamma-redirect.html" 
+                       class="link-card">
                         <div class="link-content">
                             <div class="link-icon">🎯</div>
                             <div class="link-title">Gamma 인터랙티브 제안서</div>
                             <div class="link-desc">
                                 프레젠테이션 형식의 제안서<br>
-                                인터랙티브 요소와 비주얼 중심
+                                <strong style="color: #667eea;">✓ 방문 추적 활성화</strong>
                             </div>
                         </div>
                         <div class="link-arrow">→</div>
                     </a>
                     
+                    <!-- GitHub 제안서 - 직접 연결 -->
                     <a href="https://jojunho74.github.io/proposal-tracking/gtelp-proposal-tracking" 
                        class="link-card"
                        target="_blank"
-                       onclick="trackClick('github')">
+                       onclick="trackGitHubClick()">
                         <div class="link-content">
                             <div class="link-icon">📱</div>
                             <div class="link-title">GitHub 상세 제안서</div>
                             <div class="link-desc">
                                 상세 추적이 가능한 제안서<br>
-                                분석 데이터와 통계 중심
+                                <strong style="color: #667eea;">✓ 방문 추적 활성화</strong>
                             </div>
                         </div>
                         <div class="link-arrow">→</div>
@@ -349,12 +363,24 @@
                 
                 <!-- 방문자 통계 섹션 -->
                 <div class="stats-section">
-                    <div class="stats-title">📈 이 페이지 방문자</div>
-                    <div class="visitor-count">
-                        <span class="count-icon">👥</span>
-                        <img src="https://api.countapi.xyz/hit/gtelp-tracking-main/visits?format=svg" 
-                             alt="방문자 수"
-                             style="height: 50px; filter: invert(1);">
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">Gamma 제안서</div>
+                            <div class="stat-number" id="gammaCount">---</div>
+                            <div class="stat-sublabel">총 방문자</div>
+                        </div>
+                        
+                        <div class="stat-box">
+                            <div class="stat-label">GitHub 제안서</div>
+                            <div class="stat-number" id="githubCount">---</div>
+                            <div class="stat-sublabel">총 방문자</div>
+                        </div>
+                        
+                        <div class="stat-box">
+                            <div class="stat-label">이 페이지</div>
+                            <div class="stat-number" id="indexCount">---</div>
+                            <div class="stat-sublabel">총 방문자</div>
+                        </div>
                     </div>
                 </div>
                 
@@ -365,23 +391,23 @@
                 
                 <div class="info-grid">
                     <div class="info-card">
-                        <div class="info-card-title">✅ 실시간 추적</div>
+                        <div class="info-card-title">✅ Gamma 제안서 추적</div>
                         <div class="info-card-text">
-                            Google Analytics로 실시간 방문자, 페이지뷰, 체류시간을 추적합니다.
+                            Gamma 제안서 링크 클릭 시 추적 페이지를 거쳐 방문이 기록됩니다.
                         </div>
                     </div>
                     
                     <div class="info-card">
-                        <div class="info-card-title">📊 링크 클릭 기록</div>
+                        <div class="info-card-title">📊 실시간 통계</div>
                         <div class="info-card-text">
-                            각 제안서 링크 클릭이 자동으로 기록되어 어떤 버전이 더 많이 조회되는지 확인할 수 있습니다.
+                            각 제안서의 방문자 수가 실시간으로 업데이트되어 표시됩니다.
                         </div>
                     </div>
                     
                     <div class="info-card">
-                        <div class="info-card-title">🔒 프라이버시 보호</div>
+                        <div class="info-card-title">🔒 Google Analytics</div>
                         <div class="info-card-text">
-                            개인 식별 정보는 수집하지 않으며, 통계 목적의 데이터만 익명으로 수집됩니다.
+                            측정 ID를 설정하면 상세한 분석 데이터를 확인할 수 있습니다.
                         </div>
                     </div>
                 </div>
@@ -389,107 +415,81 @@
             
             <!-- 푸터 -->
             <div class="footer">
-                <p>© 2025 G-TELP Analytics System | Powered by Google Analytics & CountAPI</p>
+                <p>© 2025 G-TELP Analytics System | 각 제안서 방문이 자동으로 추적됩니다</p>
             </div>
         </div>
     </div>
     
     <!-- 고정 방문자 카운터 배지 -->
     <div class="visitor-badge">
-        <div class="badge-label">Visitors</div>
-        <img src="https://api.countapi.xyz/hit/gtelp-tracking-main/visits?format=svg" 
+        <div class="badge-label">Index Visitors</div>
+        <img src="https://api.countapi.xyz/hit/gtelp-index-page/visits?format=svg" 
              alt="방문자"
              style="height: 40px; filter: invert(1);">
     </div>
 
     <!-- 추적 스크립트 -->
     <script>
-        // 링크 클릭 추적
-        function trackClick(site) {
-            const siteName = site === 'gamma' ? 'Gamma 제안서' : 'GitHub 제안서';
-            console.log(`🔗 클릭: ${siteName}`);
-            
-            // Google Analytics 이벤트 전송
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'click', {
-                    event_category: 'proposal_link',
-                    event_label: site,
-                    event_value: 1,
-                    transport_type: 'beacon'
+        // 통계 로드
+        async function loadStatistics() {
+            try {
+                // Gamma 제안서 방문자 수
+                const gammaResponse = await fetch('https://api.countapi.xyz/get/gtelp-gamma-visits/total');
+                const gammaData = await gammaResponse.json();
+                document.getElementById('gammaCount').textContent = gammaData.value.toLocaleString();
+                
+                // GitHub 제안서 방문자 수
+                const githubResponse = await fetch('https://api.countapi.xyz/get/gtelp-github-visits/total');
+                const githubData = await githubResponse.json();
+                document.getElementById('githubCount').textContent = githubData.value.toLocaleString();
+                
+                // 이 페이지 방문자 수 (증가)
+                const indexResponse = await fetch('https://api.countapi.xyz/hit/gtelp-index-page/visits');
+                const indexData = await indexResponse.json();
+                document.getElementById('indexCount').textContent = indexData.value.toLocaleString();
+                
+                console.log('✅ G-TELP 추적 시스템 활성화');
+                console.log('📊 통계:', {
+                    gamma: gammaData.value,
+                    github: githubData.value,
+                    index: indexData.value
                 });
+                
+            } catch (error) {
+                console.error('❌ 통계 로드 오류:', error);
             }
-            
-            // 시각적 피드백
-            const clickedCard = event.currentTarget;
-            clickedCard.style.transform = 'scale(0.98)';
-            setTimeout(() => {
-                clickedCard.style.transform = '';
-            }, 100);
         }
         
-        // 페이지 로드 완료
+        // GitHub 제안서 클릭 추적
+        function trackGitHubClick() {
+            fetch('https://api.countapi.xyz/hit/gtelp-github-visits/total')
+                .then(r => r.json())
+                .then(d => {
+                    console.log('🔗 GitHub 제안서 클릭 기록:', d.value);
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'click', {
+                            event_category: 'proposal_link',
+                            event_label: 'github',
+                            visitor_count: d.value
+                        });
+                    }
+                });
+        }
+        
+        // 페이지 로드
         window.addEventListener('load', function() {
-            console.log('✅ G-TELP 추적 시스템 활성화');
+            loadStatistics();
             
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'page_view', {
-                    page_title: 'G-TELP 제안서 추적',
-                    page_location: window.location.href,
-                    page_path: window.location.pathname
+                    page_title: 'G-TELP 제안서 인덱스',
+                    page_location: window.location.href
                 });
             }
         });
         
-        // 체류 시간 추적
-        let startTime = Date.now();
-        let isActive = true;
-        
-        // 페이지 가시성 변경 감지
-        document.addEventListener('visibilitychange', function() {
-            if (document.hidden) {
-                isActive = false;
-            } else {
-                isActive = true;
-            }
-        });
-        
-        // 페이지 이탈 시 체류 시간 기록
-        window.addEventListener('beforeunload', function() {
-            if (isActive) {
-                const timeSpent = Math.floor((Date.now() - startTime) / 1000);
-                
-                if (typeof gtag !== 'undefined' && timeSpent > 0) {
-                    gtag('event', 'timing_complete', {
-                        name: 'time_on_page',
-                        value: timeSpent,
-                        event_category: 'engagement'
-                    });
-                }
-                
-                console.log(`⏱️ 체류 시간: ${timeSpent}초`);
-            }
-        });
-        
-        // 스크롤 깊이 추적
-        let maxScroll = 0;
-        window.addEventListener('scroll', function() {
-            const scrollPercent = Math.round((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
-            
-            if (scrollPercent > maxScroll) {
-                maxScroll = scrollPercent;
-                
-                // 25%, 50%, 75%, 100% 지점에서 이벤트 전송
-                if ([25, 50, 75, 100].includes(scrollPercent)) {
-                    if (typeof gtag !== 'undefined') {
-                        gtag('event', 'scroll', {
-                            event_category: 'engagement',
-                            event_label: `${scrollPercent}%`,
-                            value: scrollPercent
-                        });
-                    }
-                }
-            }
-        });
+        // 30초마다 통계 갱신
+        setInterval(loadStatistics, 30000);
     </script>
 </body>
 </html>

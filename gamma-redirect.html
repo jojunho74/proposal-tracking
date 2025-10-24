@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G-TELP 제안서 로딩 중...</title>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YOUR_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YOUR_MEASUREMENT_ID');
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .loading-container {
+            text-align: center;
+            color: white;
+        }
+        
+        .logo {
+            font-size: 80px;
+            margin-bottom: 30px;
+            animation: bounce 1s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .loading-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            margin: 30px auto;
+            overflow: hidden;
+        }
+        
+        .loading-progress {
+            height: 100%;
+            background: white;
+            width: 0%;
+            animation: loading 1.5s ease-in-out forwards;
+        }
+        
+        @keyframes loading {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        
+        .status {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 20px;
+        }
+        
+        .counter-info {
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .counter-label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+        
+        .counter-number {
+            font-size: 36px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <div class="logo">📊</div>
+        <h1>G-TELP 제안서 로딩 중...</h1>
+        
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+        
+        <div class="status" id="status">방문자 정보 수집 중...</div>
+        
+        <div class="counter-info">
+            <div class="counter-label">Gamma 제안서 총 방문자</div>
+            <div class="counter-number" id="visitorCount">...</div>
+        </div>
+    </div>
+
+    <script>
+        // Gamma 사이트 URL
+        const GAMMA_URL = 'https://g-telp-ibt-6d5d4q2.gamma.site/';
+        
+        // 방문자 카운트 및 추적
+        async function trackAndRedirect() {
+            try {
+                // 1. 방문자 카운트
+                document.getElementById('status').textContent = '방문 기록 중...';
+                
+                const countResponse = await fetch('https://api.countapi.xyz/hit/gtelp-gamma-visits/total');
+                const countData = await countResponse.json();
+                
+                document.getElementById('visitorCount').textContent = countData.value.toLocaleString();
+                console.log('✅ Gamma 제안서 방문 기록:', countData.value);
+                
+                // 2. Google Analytics 이벤트
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'gamma_visit', {
+                        event_category: 'proposal_view',
+                        event_label: 'gamma_site',
+                        visitor_count: countData.value,
+                        transport_type: 'beacon'
+                    });
+                    console.log('✅ Google Analytics 이벤트 전송 완료');
+                }
+                
+                // 3. 날짜별 방문 기록
+                const today = new Date().toISOString().split('T')[0];
+                await fetch(`https://api.countapi.xyz/hit/gtelp-gamma-visits/${today}`);
+                
+                // 4. 리디렉션
+                document.getElementById('status').textContent = '제안서로 이동 중...';
+                
+                setTimeout(() => {
+                    console.log('🔗 Gamma 사이트로 리디렉션:', GAMMA_URL);
+                    window.location.href = GAMMA_URL;
+                }, 1500); // 1.5초 후 리디렉션
+                
+            } catch (error) {
+                console.error('❌ 추적 오류:', error);
+                // 오류가 나도 리디렉션은 진행
+                document.getElementById('status').textContent = '제안서로 이동 중...';
+                setTimeout(() => {
+                    window.location.href = GAMMA_URL;
+                }, 1000);
+            }
+        }
+        
+        // 페이지 로드 시 추적 및 리디렉션 시작
+        window.addEventListener('load', trackAndRedirect);
+        
+        // 뒤로가기 방지 (선택사항)
+        history.pushState(null, null, location.href);
+        window.onpopstate = function() {
+            history.go(1);
+        };
+    </script>
+</body>
+</html>
