@@ -367,7 +367,7 @@
                     </div>
                     <div class="bitly-url-box">
                         <a href="http://bit.ly/47aE4v6" target="_blank">bit.ly/47aE4v6</a>
-                        <button class="copy-btn" onclick="copyUrl()">📋 복사</button>
+                        <button class="copy-btn" onclick="copyUrl(event)">📋 복사</button>
                     </div>
                 </div>
                 
@@ -456,7 +456,9 @@
     <script>
         const BITLY_URL = 'http://bit.ly/47aE4v6';
         
-        function copyUrl() {
+        function copyUrl(event) {
+            event.preventDefault();
+            
             navigator.clipboard.writeText(BITLY_URL).then(() => {
                 const btn = event.target;
                 const originalText = btn.textContent;
@@ -468,7 +470,7 @@
                 }, 2000);
             }).catch(err => {
                 console.error('복사 실패:', err);
-                alert('URL: ' + BITLY_URL);
+                alert('URL 복사됨: ' + BITLY_URL);
             });
         }
         
