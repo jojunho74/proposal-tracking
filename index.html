@@ -1,5 +1,44 @@
 <!DOCTYPE html>
 <html lang="ko">
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- 기존 head 내용 -->
+    
+    <!-- Google Analytics - </head> 바로 위에 추가 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YOUR_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YOUR_MEASUREMENT_ID');
+    </script>
+</head>
+<body>
+    <!-- 기존 body 내용 -->
+    
+    <!-- 방문자 카운터 - </body> 바로 위에 추가 -->
+    <div style="position:fixed;bottom:20px;right:20px;background:#667eea;color:white;padding:20px 30px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.3);text-align:center;z-index:9999;">
+        <div style="font-size:12px;margin-bottom:10px;opacity:0.9;">VISITORS</div>
+        <img src="https://api.countapi.xyz/hit/gtelp-github-site/visits?format=svg" 
+             alt="방문자"
+             style="height:40px;filter:invert(1);">
+    </div>
+</body>
+</html>
+```
+
+---
+
+## 🎯 왜 오류가 났나요?
+
+### 로컬 파일 (file://) vs 웹 서버 (https://)
+```
+❌ file:///C:/Users/xxx/Desktop/page.html
+   → CORS 차단됨 (외부 API 호출 불가)
+
+✅ https://jojunho74.github.io/page.html
+   → 정상 작동 (웹 서버에서 실행)
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
