@@ -83,37 +83,68 @@
             padding: 50px 40px;
         }
         
-        .info-banner {
+        .tracking-info {
             background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
             border-radius: 12px;
-            padding: 20px;
+            padding: 25px;
             margin-bottom: 30px;
             box-shadow: 0 4px 12px rgba(253, 203, 110, 0.3);
         }
         
-        .info-banner-title {
+        .tracking-info-title {
             font-weight: bold;
             color: #2d3436;
-            margin-bottom: 8px;
-            font-size: 16px;
+            margin-bottom: 10px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
-        .info-banner-text {
+        .tracking-info-text {
             color: #2d3436;
             font-size: 14px;
-            line-height: 1.6;
+            line-height: 1.7;
+            margin-bottom: 12px;
         }
         
-        .bitly-link {
-            display: inline-block;
+        .bitly-url-box {
             background: white;
-            padding: 8px 16px;
-            border-radius: 6px;
+            padding: 12px 16px;
+            border-radius: 8px;
             font-family: 'Courier New', monospace;
             font-weight: bold;
             color: #667eea;
-            margin-top: 8px;
+            font-size: 16px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        
+        .bitly-url-box a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .bitly-url-box a:hover {
+            text-decoration: underline;
+        }
+        
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: #5568d3;
         }
         
         .section-title {
@@ -148,6 +179,21 @@
             cursor: pointer;
         }
         
+        .link-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .link-card:hover::before {
+            left: 100%;
+        }
+        
         .link-card:hover {
             transform: translateY(-5px) scale(1.02);
             box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
@@ -176,6 +222,13 @@
             line-height: 1.5;
         }
         
+        .link-url {
+            font-size: 12px;
+            color: #999;
+            font-family: 'Courier New', monospace;
+            margin-top: 8px;
+        }
+        
         .link-arrow {
             font-size: 32px;
             color: #667eea;
@@ -186,24 +239,50 @@
             transform: translateX(5px);
         }
         
-        .stats-note {
+        .stats-info {
             background: #e8f5e9;
             border-left: 4px solid #4caf50;
-            padding: 20px;
+            padding: 25px;
             border-radius: 8px;
             margin-bottom: 30px;
         }
         
-        .stats-note-title {
+        .stats-info-title {
             font-weight: bold;
             color: #2e7d32;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            font-size: 18px;
         }
         
-        .stats-note-text {
+        .stats-info-text {
             color: #2e7d32;
             font-size: 14px;
-            line-height: 1.6;
+            line-height: 1.7;
+        }
+        
+        .stats-info-list {
+            margin-top: 12px;
+            padding-left: 20px;
+        }
+        
+        .stats-info-list li {
+            margin-bottom: 6px;
+        }
+        
+        .dashboard-btn {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 12px;
+            transition: background 0.3s;
+        }
+        
+        .dashboard-btn:hover {
+            background: #45a049;
         }
         
         .footer {
@@ -233,6 +312,11 @@
             .link-title {
                 font-size: 18px;
             }
+            
+            .bitly-url-box {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
@@ -242,21 +326,22 @@
             <div class="header">
                 <div class="logo">📊</div>
                 <h1>G-TELP 제안서</h1>
-                <p>클릭 추적이 가능한 링크로 공유하세요</p>
+                <p>Bitly로 모든 클릭을 추적합니다</p>
             </div>
             
             <div class="content">
-                <!-- Bitly 안내 -->
-                <div class="info-banner">
-                    <div class="info-banner-title">🔗 추적 가능한 단축 URL 사용</div>
-                    <div class="info-banner-text">
-                        Bitly 같은 URL 단축 서비스를 사용하면 어디서든 클릭을 추적할 수 있습니다.
-                        <br><br>
-                        <strong>설정 방법:</strong><br>
-                        1. <a href="https://bitly.com" target="_blank" style="color: #667eea; font-weight: bold;">Bitly.com</a> 가입<br>
-                        2. Gamma URL로 단축 링크 생성<br>
-                        3. 생성된 링크를 아래에 사용
-                        <div class="bitly-link">예: bit.ly/gtelp-gamma</div>
+                <!-- Bitly 추적 안내 -->
+                <div class="tracking-info">
+                    <div class="tracking-info-title">
+                        ✅ Bitly 추적 활성화됨
+                    </div>
+                    <div class="tracking-info-text">
+                        모든 제안서 링크가 Bitly 단축 URL을 사용하므로, 어디서 클릭하든 자동으로 추적됩니다.
+                        이메일, SNS, 문자 메시지 어디든 공유 가능합니다!
+                    </div>
+                    <div class="bitly-url-box">
+                        <a href="http://bit.ly/47aE4v6" target="_blank">bit.ly/47aE4v6</a>
+                        <button class="copy-btn" onclick="copyUrl()">복사</button>
                     </div>
                 </div>
                 
@@ -266,7 +351,7 @@
                 </div>
                 
                 <div class="links-grid">
-                    <!-- Gamma 제안서 - Bitly URL로 교체하세요 -->
+                    <!-- Gamma 제안서 (Bitly) -->
                     <a href="http://bit.ly/47aE4v6" 
                        class="link-card"
                        target="_blank"
@@ -277,10 +362,9 @@
                             <div class="link-desc">
                                 프레젠테이션 형식의 제안서<br>
                                 <strong style="color: #667eea;">✓ Bitly로 모든 클릭 추적</strong><br>
-                                <span style="font-size: 12px; opacity: 0.7;">
-                                    ※ href를 Bitly 단축 URL로 교체하세요
-                                </span>
+                                <strong style="color: #4caf50;">✓ 이메일/SNS/직접 접속 모두 카운트</strong>
                             </div>
+                            <div class="link-url">🔗 bit.ly/47aE4v6</div>
                         </div>
                         <div class="link-arrow">→</div>
                     </a>
@@ -302,42 +386,64 @@
                     </a>
                 </div>
                 
-                <!-- 통계 안내 -->
-                <div class="stats-note">
-                    <div class="stats-note-title">📈 클릭 통계 확인하기</div>
-                    <div class="stats-note-text">
-                        Bitly 대시보드(<a href="https://bitly.com/dashboard" target="_blank" style="color: #667eea; font-weight: bold;">bitly.com/dashboard</a>)에서 실시간으로 확인할 수 있습니다:
-                        <br><br>
-                        • 총 클릭 수<br>
-                        • 지역별 통계 (서울, 부산 등)<br>
-                        • 기기별 통계 (모바일, PC)<br>
-                        • 시간대별 그래프<br>
-                        • 유입 경로 (이메일, SNS 등)
+                <!-- 통계 확인 안내 -->
+                <div class="stats-info">
+                    <div class="stats-info-title">📈 실시간 통계 확인하기</div>
+                    <div class="stats-info-text">
+                        Bitly 대시보드에서 다음 정보를 실시간으로 확인할 수 있습니다:
                     </div>
+                    <ul class="stats-info-list">
+                        <li><strong>총 클릭 수</strong> - bit.ly/47aE4v6의 전체 클릭</li>
+                        <li><strong>지역별 통계</strong> - 서울, 부산, 대구 등</li>
+                        <li><strong>기기별 통계</strong> - 모바일, PC, 태블릿</li>
+                        <li><strong>시간대별 그래프</strong> - 언제 가장 많이 클릭되는지</li>
+                        <li><strong>유입 경로</strong> - 이메일, SNS, 직접 접속 등</li>
+                    </ul>
+                    <a href="https://bitly.com/dashboard" target="_blank" class="dashboard-btn">
+                        📊 Bitly 대시보드 열기
+                    </a>
                 </div>
             </div>
             
             <div class="footer">
                 <p>© 2025 G-TELP Analytics System | Powered by Bitly & Google Analytics</p>
+                <p style="margin-top: 8px; font-size: 12px;">
+                    Gamma 제안서 추적 URL: <strong>bit.ly/47aE4v6</strong>
+                </p>
             </div>
         </div>
     </div>
 
     <script>
+        function copyUrl() {
+            const url = 'http://bit.ly/47aE4v6';
+            navigator.clipboard.writeText(url).then(() => {
+                const btn = event.target;
+                btn.textContent = '✓ 복사됨';
+                setTimeout(() => {
+                    btn.textContent = '복사';
+                }, 2000);
+            });
+        }
+        
         function trackClick(site) {
             console.log(`🔗 ${site} 제안서 클릭`);
             
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'click', {
                     event_category: 'proposal_link',
-                    event_label: site
+                    event_label: site,
+                    bitly_url: 'bit.ly/47aE4v6'
                 });
             }
         }
         
         window.addEventListener('load', function() {
             console.log('✅ G-TELP 추적 시스템 활성화');
-            console.log('💡 Bitly URL로 교체하면 어디서든 클릭을 추적할 수 있습니다');
+            console.log('🔗 Bitly 추적 URL: bit.ly/47aE4v6');
+            console.log('📊 Bitly 대시보드: https://bitly.com/dashboard');
+            console.log('');
+            console.log('💡 이제 어디서든 bit.ly/47aE4v6을 공유하면 자동으로 추적됩니다!');
             
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'page_view', {
