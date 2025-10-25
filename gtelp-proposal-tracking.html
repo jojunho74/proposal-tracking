@@ -1,4 +1,140 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!-- 
+=============================================================
+💡 이 코드를 복사해서 Gamma.site에 붙여넣으세요
+=============================================================
+-->
+
+<!-- 방문 카운터 -->
+<div style="
+    background: linear-gradient(135deg, #800020 0%, #a00028 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    text-align: center;
+    max-width: 300px;
+    margin: 20px auto;
+    font-family: 'Malgun Gothic', Arial, sans-serif;
+">
+    <h3 style="margin: 0 0 10px 0; font-size: 1.2em;">
+        🎯 방문자 현황
+    </h3>
+    <div style="font-size: 3em; font-weight: bold; margin: 15px 0;">
+        <span id="visitor-count">0</span>
+    </div>
+    <div style="font-size: 0.9em; opacity: 0.8;">
+        총 방문자 수
+    </div>
+</div>
+
+<script>
+// 페이지 열리면 자동으로 카운트 증가
+fetch('http://localhost:5000/api/visit', {
+    method: 'POST'
+})
+.then(response => response.json())
+.then(data => {
+    // 숫자에 콤마 추가 (예: 1,234)
+    document.getElementById('visitor-count').textContent = 
+        data.total_visits.toLocaleString();
+})
+.catch(error => {
+    console.log('서버 연결 실패:', error);
+    document.getElementById('visitor-count').textContent = '...';
+});
+</script>
+
+<!-- 
+=============================================================
+🎨 다른 디자인을 원하시면 아래 코드를 사용하세요
+=============================================================
+-->
+
+<!-- 
+=============================================================
+디자인 2: 간단한 텍스트 스타일
+=============================================================
+
+<div style="text-align: center; padding: 15px; background: #800020; color: white; border-radius: 5px;">
+    방문자 수: <span id="visitor-count" style="font-size: 1.5em; font-weight: bold;">0</span>
+</div>
+
+<script>
+fetch('http://localhost:5000/api/visit', {
+    method: 'POST'
+})
+.then(response => response.json())
+.then(data => {
+    document.getElementById('visitor-count').textContent = 
+        data.total_visits.toLocaleString();
+});
+</script>
+-->
+
+<!-- 
+=============================================================
+디자인 3: 여러 통계 표시
+=============================================================
+
+<div style="
+    background: #800020;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 350px;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+">
+    <h3 style="margin: 0 0 15px 0;">🎯 G-TELP IBT 방문 현황</h3>
+    
+    <div style="font-size: 2.5em; font-weight: bold;">
+        <span id="total">0</span>
+    </div>
+    <div style="font-size: 0.9em; opacity: 0.8; margin-bottom: 15px;">총 방문자</div>
+    
+    <div style="display: flex; justify-content: space-around; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.3);">
+        <div>
+            <div style="font-size: 1.5em; font-weight: bold;" id="unique">0</div>
+            <div style="font-size: 0.8em;">고유 방문자</div>
+        </div>
+        <div>
+            <div style="font-size: 1.5em; font-weight: bold;" id="today">0</div>
+            <div style="font-size: 0.8em;">오늘 방문</div>
+        </div>
+    </div>
+</div>
+
+<script>
+fetch('http://localhost:5000/api/visit', {
+    method: 'POST'
+})
+.then(response => response.json())
+.then(data => {
+    document.getElementById('total').textContent = data.total_visits.toLocaleString();
+    document.getElementById('unique').textContent = data.unique_visitors.toLocaleString();
+    document.getElementById('today').textContent = data.today_visits.toLocaleString();
+});
+</script>
+-->
+
+<!-- 
+=============================================================
+디자인 4: 보이지 않는 카운터 (숫자 표시 안 함)
+=============================================================
+
+<script>
+// 방문만 기록하고 화면에는 아무것도 안 보임
+fetch('http://localhost:5000/api/visit', {
+    method: 'POST'
+})
+.then(response => response.json())
+.then(data => {
+    console.log('방문 기록 완료:', data.total_visits);
+});
+</script>
+-->
+
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
