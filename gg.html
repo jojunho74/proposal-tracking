@@ -241,3 +241,118 @@
     };
 
 })();
+ <script>
+    // tracking.js - 개선 버전 (에러 방지)
+    (function() {
+        'use strict';
+
+        // 안전한 JSON 파싱
+        function safeJSONParse(data, defaultValue) {
+            try {
+                const parsed = JSON.parse(data);
+                return parsed;
+            } catch (error) {
+                console.warn('JSON 파싱 에러, 기본값 사용:', error);
+                return defaultValue;
+            }
+        }
+
+        // 안전한 데이터 저장
+        function safeJSONStringify(data) {
+            try {
+                return JSON.stringify(data);
+            } catch (error) {
+                console.error('JSON 변환 에러:', error);
+                return JSON.stringify({visitors: []});
+            }
+        }
+
+        // URL에서 recipient_id 파라미터 추출
+        function getRecipientId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('recipient_id');
+        }
+
+        // 방문 기록 저장
+        function trackVisit(recipientId) {
+            if (!recipientId) {
+                console.log('No recipient_id found in URL');
+                return;
+            }
+
+            // 기존 데이터 안전하게 가져오기
+            const stored = localStorage.getItem('proposalTracking');
+            let trackingData = safeJSONParse(stored, {visitors: []});
+            
+            // visitors 배열 확인
+            if (!Array.isArray(trackingData.visitors)) {
+                trackingData.visitors = [];
+            }
+
+            // 새 방문 기록
+            const visitRecord = {
+                id: recipientId,
+                timestamp: new Date().toISOString(),
+                url: window.location.href.substring(0, 200),
+                page: 'gg.html'
+            };
+
+            trackingData.visitors.push(visitRecord);
+
+            // 최대 1000개까지만 저장 (메모리 관리)
+            if (trackingData.visitors.length > 1000) {
+                trackingData.visitors = trackingData.visitors.slice(-1000);
+            }
+
+            // 안전하게 저장
+            const jsonString = safeJSONStringify(trackingData);
+            localStorage.setItem('proposalTracking', jsonString);
+
+            console.log('✅ Visit tracked:', recipientId);
+            console.log('📊 Total visits:', trackingData.visitors.length);
+        }
+
+        // 방문 통계 가져오기
+        function getVisitStats() {
+            const stored = localStorage.getItem('proposalTracking');
+            const trackingData = safeJSONParse(stored, {visitors: []});
+            const visitors = trackingData.visitors || [];
+
+            const uniqueVisitors = new Set(visitors.map(v => v.id));
+
+            return {
+                totalVisits: visitors.length,
+                uniqueVisitors: uniqueVisitors.size,
+                visitors: visitors
+            };
+        }
+
+        // 페이지 로드 시 자동 실행
+        window.addEventListener('DOMContentLoaded', function() {
+            const recipientId = getRecipientId();
+            
+            if (recipientId) {
+                const cleanId = recipientId.replace(/[^\w\-]/g, '_').substring(0, 50);
+                trackVisit(cleanId);
+                
+                console.log('🎯 Tracking initialized');
+                console.log('👤 Recipient:', cleanId);
+            } else {
+                console.log('ℹ️ No tracking - recipient_id not found');
+            }
+        });
+
+        // 전역 함수로 노출
+        window.proposalTracking = {
+            getStats: getVisitStats,
+            track: trackVisit,
+            reset: function() {
+                localStorage.setItem('proposalTracking', JSON.stringify({visitors: []}));
+                console.log('🔄 Tracking data reset');
+            }
+        };
+
+    })();
+    </script>
+</body>
+</html>
